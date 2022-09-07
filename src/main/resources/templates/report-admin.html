@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html style="font-size: 16px;" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <title>Report</title>
+  <link rel="stylesheet" href="styles/nicepage.css" media="screen">
+  <link rel="stylesheet" href="styles/str3.css" media="screen">
+  <script src="node_modules/chart.js/dist/Chart.bundle.min.js"></script>
+  <link rel="stylesheet" href="styles/report.css" media="screen">
+  <script class="u-script" type="text/javascript" src="scripts/jquery.js" defer=""></script>
+  <script class="u-script" type="text/javascript" src="scripts/nicepage.js" defer=""></script>
+  <meta name="generator" content="Nicepage 4.11.3, nicepage.com">
+  <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
+  <meta name="theme-color" content="#478ac9">
+  <meta property="og:title" content="Report">
+  <meta property="og:type" content="website">
+  <script src="https://www.google.com/jsapi"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="u-body u-xl-mode">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+
+<section class="u-clearfix u-palette-1-base u-section-1" id="sec-820c">
+  <div class="u-clearfix u-sheet u-sheet-1">
+    <h3 class="u-text u-text-default u-text-1">[[${#httpServletRequest.remoteUser}]]</h3>
+    <form th:object="${user}" th:action="@{/report-admin}" method="post"  style="top: 40px; left: 260px;">
+      <input th:field="*{email}" type="text" style="position:relative;left:480px;color: #0f0f0f" placeholder="name@example.com"/>
+      <input type="submit" class="u-border-2 u-border-palette-2-base u-btn u-btn-round u-button-style u-custom-item u-hover-palette-2-base u-palette-2-base u-radius-6 u-text-hover-white u-btn-3" value="find"/>
+    </form>
+
+
+    <div class="u-list u-list-1">
+      <div class="u-repeater u-repeater-1">
+        <div class="u-container-style u-list-item u-repeater-item">
+          <div class="u-container-layout u-similar-container u-valign-middle u-container-layout-1">
+            <a href="/index" class="u-border-2 u-border-palette-2-base u-btn u-btn-round u-button-style u-custom-item u-hover-palette-2-base u-palette-2-base u-radius-6 u-text-hover-white u-btn-1">Home</a>
+          </div>
+        </div>
+        <div class="u-container-style u-list-item u-repeater-item">
+          <div class="u-container-layout u-similar-container u-valign-middle u-container-layout-2">
+            <a onclick="history.back(-1)" class="u-border-2 u-border-palette-2-base u-btn u-btn-round u-button-style u-custom-item u-hover-palette-2-base u-palette-2-base u-radius-6 u-text-hover-white u-btn-2">back</a>
+          </div>
+        </div>
+        <div class="u-container-style u-list-item u-repeater-item">
+          <div class="u-container-layout u-similar-container u-valign-middle u-container-layout-3">
+            <form th:action="@{/logout}" method="post">
+              <input type="submit" class="u-border-2 u-border-palette-2-base u-btn u-btn-round u-button-style u-custom-item u-hover-palette-2-base u-palette-2-base u-radius-6 u-text-hover-white u-btn-3" value="logout"/>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="u-container-style u-expanded-width u-group u-palette-3-light-2 u-group-1">
+      <div class="u-container-layout u-container-layout-4">
+
+
+
+
+        <div id="usMemory" ></div>
+        <hr>
+
+        <label for="speedChart">File activity for the last 15 days:</label>
+        <canvas id="speedChart" width="300" height="100"></canvas>
+        <hr>
+        <label for="autoLogs">Authorization activity for the last 15 days:</label>
+        <canvas id="autoLogs" width="300" height="100"></canvas>
+        <hr>
+        <label for="authActive">Authorization activity: </label>
+        <div class="u-border-3 u-border-palette-1-base u-container-style u-group u-white u-group-2" style= "bottom:235px">
+
+          <div id="authActive" class="u-container-layout u-container-layout-5" >
+            <table class="table table-hover">
+              <thead>
+              <tr>
+                <th>location</th>
+                <th>date</td>
+                <th>action</td>
+              </tr>
+              </thead>
+            </table>
+          </div>
+        </div>
+        <div class="u-border-3 u-border-palette-1-base u-container-style u-group u-white u-group-3" style= "bottom:248px">
+          <label for="fileActive">File activity:</label>
+          <div id="fileActive" class="u-container-layout u-container-layout-6" >
+            <table class="table table-hover">
+              <thead>
+              <tr>
+                <th>name</th>
+                <th>action</th>
+                <th>date</td>
+              </tr>
+              </thead></table>
+          </div>
+        </div>
+        <div class="u-container-style u-group u-white u-group-4" style= "bottom:250px">
+          <div class="u-container-layout u-container-layout-7" style= "height: 320px; overflow: auto;">
+            <table class="table table-hover">
+              <tbody  id="auth">
+              <div  th:if="${actives != null}" >
+                <tr th:each="active : ${actives}">
+                  <td th:text="${active.getLocation()}" data-field="location"><a style="color: #0f0f0f" ></a></td>
+                  <td th:text="${active.getDate()}" data-field="date"> <a style="color: #0f0f0f"></a></td>
+                  <td th:text="${active.getAction()}" data-field="action"> <a style="color: #0f0f0f"></a></td>
+                </tr>
+              </div>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="u-container-style u-group u-white u-group-5 " style= "bottom:250px">
+          <div class="u-container-layout u-container-layout-8" style= "height: 320px; overflow: auto;">
+            <table class="table table-hover">
+              <tbody id="file_active">
+              <div  th:if="${files != null}">
+                <tr th:each="file : ${files}">
+                  <td data-field="name" th:text="${file.getFile_name()}"><a style="color: #0f0f0f" ></a></td>
+                  <td data-field="action" th:text="${file.getAction()}"> <a style="color: #0f0f0f"></a></td>
+                  <td data-field="data" data-value="1" th:text="${file.getDate()}"><a style="color: #0f0f0f"></a></td>
+                </tr>
+              </div>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+<script th:inline="javascript">
+  google.load("visualization", "1", {packages:["corechart"]});
+  google.setOnLoadCallback(drawChart);
+  function drawChart() {
+    var data = google.visualization.arrayToDataTable([
+      ['Status', 'memories'],
+      ['free (' + [[${freeMemoryTxt}]]+')', [[${freeMemory}]]],
+      ['used (' + [[${usedMemoryTxt}]]+')',   [[${usedMemory}]]]
+    ]);
+    var options = {
+      title: 'Memory usage',
+      is3D: true,
+      pieResidueSliceLabel: 'Other'
+    };
+    var chart = new google.visualization.PieChart(document.getElementById('usMemory'));
+    chart.draw(data, options);
+  }
+</script>
+
+<script th:inline="javascript">
+
+  var speedCanvas = document.getElementById("speedChart");
+  var day1 = [[${day1}]],day2 = [[${day2}]],day3 = [[${day3}]],day4 = [[${day4}]],day5 = [[${day5}]]
+          ,day6 = [[${day6}]],day7 = [[${day7}]],day8 = [[${day8}]],day9 = [[${day9}]],day10 = [[${day10}]]
+          ,day11 = [[${day11}]],day12 = [[${day12}]],day13 = [[${day13}]],day14 = [[${day14}]],day15 = [[${day15}]];
+
+  var add1=[[${add1}]],add2=[[${add2}]],add3=[[${add3}]],add4=[[${add4}]],add5=[[${add5}]]
+          ,add6=[[${add6}]],add7=[[${add7}]]
+          ,add8=[[${add8}]],add9=[[${add9}]],add10=[[${add10}]],add11=[[${add11}]]
+          ,add12=[[${add12}]],add13=[[${add13}]],add15=[[${add15}]],add14=[[${add14}]];
+  var rem1=[[${rem1}]],rem2=[[${rem2}]],rem3=[[${rem3}]],rem4=[[${rem4}]],rem5=[[${rem5}]]
+          ,rem6=[[${rem6}]],rem7=[[${rem7}]]
+          ,rem8=[[${rem8}]],rem9=[[${rem9}]],rem10=[[${rem10}]],rem11=[[${rem11}]]
+          ,rem12=[[${rem12}]],rem13=[[${rem13}]],rem14=[[${rem14}]],rem15=[[${rem15}]];
+  var res1=[[${res1}]],res2=[[${res2}]],res3=[[${res3}]],res4=[[${res4}]],res5=[[${res5}]]
+          ,res6=[[${res6}]],res7=[[${res7}]],res8=[[${res8}]],res9=[[${res9}]],res10=[[${res10}]],res11=[[${res11}]]
+          ,res12=[[${res12}]],res13=[[${res13}]],res14=[[${res14}]],res15=[[${res15}]];
+
+  Chart.defaults.global.defaultFontFamily = "Lato";
+  Chart.defaults.global.defaultFontSize = 18;
+
+  var addedF = {
+    label: "Added",
+    data: [add1, add2, add3, add4, add5, add6, add7,add8, add9, add10, add11, add12, add13, add14, add15],
+    lineTension: 0,
+    fill: false,
+    borderColor: 'green'
+  };
+
+  var removedF = {
+    label: "Removed",
+    data: [rem1, rem2, rem3, rem4, rem5, rem6, rem7,rem8, rem9, rem10, rem11, rem12, rem13, rem14, rem15],
+    lineTension: 0,
+    fill: false,
+    borderColor: 'red'
+  };
+  var restoredF = {
+    label: "Restored",
+    data: [res1, res2, res3, res4, res5, res6, res7,res8, res9, res10, res11, res12, res13, res14,res15],
+    lineTension: 0,
+    fill: false,
+    borderColor: 'blue'
+  };
+
+  var speedData = {
+    labels: [day1,day2 ,day3 ,day4 ,day5 ,day6 ,day7, day8, day9, day10, day11, day12, day13, day14, day15 ],
+    datasets: [addedF, removedF,restoredF]
+  };
+
+  var chartOptions = {
+    legend: {
+      display: true,
+      position: 'top',
+      labels: {
+        boxWidth: 80,
+        fontColor: 'black'
+      }
+    }
+  };
+
+  var lineChart = new Chart(speedCanvas, {
+    type: 'line',
+    data: speedData,
+    options: chartOptions
+  });
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+<script th:inline="javascript">
+
+  var speedCanvas = document.getElementById("autoLogs");
+
+  var succ1=[[${succ1}]],succ2=[[${succ2}]],succ3=[[${succ3}]],succ4=[[${succ4}]],succ5=[[${succ5}]]
+          ,succ6=[[${succ6}]],succ7=[[${succ7}]]
+          ,succ8=[[${succ8}]],succ9=[[${succ9}]],succ10=[[${succ10}]],succ11=[[${succ11}]]
+          ,succ12=[[${succ12}]],succ13=[[${succ13}]],succ14=[[${succ14}]],succ15=[[${succ15}]];
+  var unsucc1=[[${unsucc1}]],unsucc2=[[${unsucc2}]],unsucc3=[[${unsucc3}]],unsucc4=[[${unsucc4}]],unsucc5=[[${unsucc5}]]
+          ,unsucc6=[[${unsucc6}]],unsucc7=[[${unsucc7}]]
+          ,unsucc8=[[${unsucc8}]],unsucc9=[[${unsucc9}]],unsucc10=[[${unsucc10}]],unsucc11=[[${unsucc11}]]
+          ,unsucc12=[[${unsucc12}]],unsucc13=[[${unsucc13}]],unsucc14=[[${unsucc14}]],unsucc15=[[${unsucc15}]];
+
+  Chart.defaults.global.defaultFontFamily = "Lato";
+  Chart.defaults.global.defaultFontSize = 18;
+
+  var successF = {
+    label: "Success",
+    data: [succ1, succ2, succ3, succ4, succ5, succ6, succ7,succ8, succ9, succ10, succ11, succ12, succ13, succ14, succ15],
+    lineTension: 0,
+    fill: false,
+    borderColor: 'blue'
+  };
+
+  var unsuccessF = {
+    label: "Unsuccess",
+    data: [unsucc1, unsucc2, unsucc3, unsucc4, unsucc5, unsucc6, unsucc7,unsucc8, unsucc9, unsucc10, unsucc11, unsucc12, unsucc13, unsucc14, unsucc15],
+    lineTension: 0,
+    fill: false,
+    borderColor: 'red'
+  };
+
+
+  var speedData = {
+    labels: [day1,day2 ,day3 ,day4 ,day5 ,day6 ,day7, day8, day9, day10, day11, day12, day13, day14, day15 ],
+    datasets: [successF, unsuccessF]
+  };
+
+  var chartOptions = {
+    legend: {
+      display: true,
+      position: 'top',
+      labels: {
+        boxWidth: 80,
+        fontColor: 'black'
+      }
+    }
+  };
+
+  var lineChart = new Chart(speedCanvas, {
+    type: 'line',
+    data: speedData,
+    options: chartOptions
+  });
+
+
+
+</script>
+
+</body>
+</html>

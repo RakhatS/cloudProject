@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html style="font-size: 16px;" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <title>FTP</title>
+    <link rel="stylesheet" th:href="@{/styles/nicepage.css}" media="screen">
+    <link rel="stylesheet" th:href="@{/styles/str3.css}" media="screen">
+    <script class="u-script" type="text/javascript" th:src="@{/scripts/jquery.js}" defer=""></script>
+    <script class="u-script" type="text/javascript" th:src="@{/scripts/nicepage.js}" defer=""></script>
+    <meta name="generator" content="Nicepage 4.11.3, nicepage.com">
+    <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
+
+
+    <meta name="theme-color" content="#478ac9">
+    <meta property="og:title" content="Recycle bin">
+    <meta property="og:type" content="website">
+
+
+
+</head>
+<body data-home-page="undefined" data-home-page-title="Страница 3" class="u-body u-xl-mode">
+<section class="u-clearfix u-palette-1-base u-section-1" id="sec-820c">
+    <div class="u-clearfix u-sheet u-sheet-1">
+        <h3 class="u-text u-text-default u-text-1">[[${#httpServletRequest.remoteUser}]]</h3>
+        <h3 class="u-text u-text-default u-text-1">Recycle bin</h3>
+        <div class="u-container-style u-expanded-width u-group u-palette-3-light-2 u-group-1">
+            <div class="u-container-layout u-container-layout-1">
+
+                <a href="/index" style="position: absolute;margin-top:0px;" type="submit" class="u-border-2 u-border-hover-palette-1-base u-border-palette-1-base u-btn u-btn-round u-button-style u-hover-palette-1-base u-none u-radius-50 u-btn-1">home</a>
+                <h5 class="u-text u-text-default u-text-2">&nbsp;</h5>
+
+
+                <div  class="u-container-style u-expanded-width u-group u-white u-group-2">
+                    <div class="u-container-layout u-container-layout-2">
+                        <br>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>name</th>
+                                <th>memory</th>
+                                <th>left</td>
+                            </tr>
+                            </thead>
+                            <tbody id="data">
+                            <div th:each="file : ${files}">
+                                <tr >
+                                    <td data-field="name"><a style="color: #0f0f0f"  th:href="${file.getFile_path()}" download th:text="${file.getName()}"></a></td>
+                                    <td data-field="memory"> <a style="color: #0f0f0f" th:text="${file.getMemory()}"></a></td>
+                                    <td data-field="data" data-value="1"><a style="color: red" th:text="${file.getLeft()}"></a></td>
+                                    <td><a th:href="@{'/index/recycle-bin/' + ${file.getId()} + '/reestablish'}" style="color:red" >Reestablish</a></td>
+                                    <td><a th:href="@{'/index/recycle-bin/' + ${file.getId()} + '/delete'}" style="color:red" >Remove</a></td>
+                                </tr>
+                            </div>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
